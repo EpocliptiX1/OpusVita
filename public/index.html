@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#2e6b5e">
+  <title>OpusVita</title>
+  <meta name="description" content="OpusVita – wellbeing check-in and psychologist session booking for office workers.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232e6b5e'/%3E%3Cpath d='M16 24s-8-4.7-8-10.2A4.3 4.3 0 0 1 16 11a4.3 4.3 0 0 1 8 2.8C24 19.3 16 24 16 24z' fill='%23fff'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app" id="app">
+
+  <aside class="sidebar" id="sidebar"></aside>
+
+  <div class="screen active loading" id="boot"><span class="spinner"></span>Loading OpusVita…</div>
+
+  <!-- ===== TAB: HOME ===== -->
+  <section class="screen" id="home">
+    <div class="scroll" id="homeBody"></div>
+    <nav class="nav" data-tab="home"></nav>
+  </section>
+
+  <!-- ===== TAB: INSIGHTS ===== -->
+  <section class="screen" id="insights">
+    <div class="scroll">
+      <h1>Insights</h1>
+      <p class="muted" style="margin:4px 0 16px">Trends from your band and check-ins.</p>
+      <div class="seg" id="rangeSeg"></div>
+      <div id="insightsBody"></div>
+    </div>
+    <nav class="nav" data-tab="insights"></nav>
+  </section>
+
+  <!-- ===== TAB: SESSIONS ===== -->
+  <section class="screen" id="sessions">
+    <div class="scroll">
+      <div class="row" style="margin-bottom:4px"><h1>Sessions</h1><button class="btn sm" data-go="q1">+ Book</button></div>
+      <p class="muted" style="margin-bottom:16px">Reschedule or cancel up to 12 hours before.</p>
+      <div class="seg" id="sessionSeg" style="margin-bottom:16px"></div>
+      <div id="sessionList"></div>
+      <div id="sessionTeam"></div>
+    </div>
+    <nav class="nav" data-tab="sessions"></nav>
+  </section>
+
+  <!-- ===== TAB: PROFILE ===== -->
+  <section class="screen" id="profile">
+    <div class="scroll" id="profileBody"></div>
+    <nav class="nav" data-tab="profile"></nav>
+  </section>
+
+  <!-- ===== CHECK-IN STEP 1 ===== -->
+  <section class="screen flow" id="q1">
+    <div class="topbar"><button class="back" data-go="home" aria-label="Back"><svg class="hi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"/></svg></button>
+      <div><div class="t">Wellbeing check-in</div><div class="s">Step 1 of 3 · about 2 min</div></div></div>
+    <div class="progress"><span class="on"></span><span></span><span></span></div>
+    <div class="scroll">
+      <h2>How have you been feeling this week?</h2>
+      <p class="muted">There are no wrong answers. Only your psychologist can read what you share.</p>
+      <div class="scale" id="mood" style="margin-top:18px"></div>
+      <div class="q">How well have you been sleeping?</div>
+      <div class="seg" id="sleep"></div>
+      <div class="q">How is your energy during work hours?</div>
+      <input type="range" id="energy" min="1" max="10" value="5" aria-label="Energy level from 1 to 10">
+      <div class="range-row"><span>Drained</span><span class="range-val" id="energyVal"></span><span>Energised</span></div>
+    </div>
+    <div class="footer"><button class="btn" id="q1next">Next</button></div>
+  </section>
+
+  <!-- ===== CHECK-IN STEP 2 ===== -->
+  <section class="screen flow" id="q2">
+    <div class="topbar"><button class="back" data-go="q1" aria-label="Back"><svg class="hi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"/></svg></button>
+      <div><div class="t">Wellbeing check-in</div><div class="s">Step 2 of 3</div></div></div>
+    <div class="progress"><span class="on"></span><span class="on"></span><span></span></div>
+    <div class="scroll">
+      <h2>How often did you work overtime this week?</h2>
+      <div id="overtime" style="margin-top:14px"></div>
+      <div class="row q"><span>What's weighing on you most?</span><span class="muted" style="font-weight:400">Pick any</span></div>
+      <div class="chips" id="stress"></div>
+      <textarea id="notes" maxlength="500" placeholder="Anything else you'd like your psychologist to know? (optional)"></textarea>
+    </div>
+    <div class="footer"><button class="btn" id="q2next">See support options</button></div>
+  </section>
+
+  <!-- ===== STEP 3: SUPPORT PLAN ===== -->
+  <section class="screen flow" id="plan">
+    <div class="topbar"><button class="back" data-go="q2" aria-label="Back"><svg class="hi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"/></svg></button>
+      <div><div class="t">Your support plan</div><div class="s">Step 3 of 3</div></div></div>
+    <div class="progress"><span class="on"></span><span class="on"></span><span class="on"></span></div>
+    <div class="scroll" id="planBody"></div>
+    <div class="footer"><button class="btn" id="planNext">Choose a time</button></div>
+  </section>
+
+  <!-- ===== PICK A TIME ===== -->
+  <section class="screen flow" id="time">
+    <div class="topbar"><button class="back" id="timeBack" aria-label="Back"><svg class="hi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"/></svg></button>
+      <div><div class="t" id="timeTitle">Pick a time</div><div class="s" id="timeDoc"></div></div></div>
+    <div class="scroll" id="timeBody"></div>
+    <div class="footer"><button class="btn" id="timeNext">Review booking</button></div>
+  </section>
+
+  <!-- ===== REVIEW ===== -->
+  <section class="screen flow" id="review">
+    <div class="topbar"><button class="back" data-go="time" aria-label="Back"><svg class="hi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"/></svg></button><div class="t">Review &amp; confirm</div></div>
+    <div class="scroll" id="reviewBody"></div>
+    <div class="footer">
+      <button class="btn" id="confirmBtn">Confirm booking</button>
+      <button class="link" data-go="time">Change time</button>
+    </div>
+  </section>
+
+  <!-- ===== SUCCESS ===== -->
+  <section class="screen flow" id="success">
+    <div class="scroll" id="successBody" style="text-align:center"></div>
+    <div class="footer">
+      <button class="btn" data-go="home">Back to home</button>
+      <button class="link" data-go="sessions">View in Sessions</button>
+    </div>
+  </section>
+
+  <div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</div>
+
+<script src="charts.js"></script>
+<script src="icons.js"></script>
+<script src="api.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
